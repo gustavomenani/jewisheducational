@@ -29,3 +29,7 @@ debug-editor.png
 video-check-*.png
 video1-*.png
 video2-*.png
+.bianchini/
+docs/superpowers/
+qa/playwright/artifacts/
+qa/playwright/report/
