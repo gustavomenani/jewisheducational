@@ -16,9 +16,8 @@ test('catalog exposes all supported editor areas', () => {
 
 test('catalog exposes global and page fields', () => {
   assert.ok(fieldsForArea('global').some((field) => field.key === 'site_name'));
-  assert.ok(fieldsForArea('home').some((field) => field.key === 'home_intro_title'));
-  assert.ok(fieldsForArea('home').some((field) => field.key === 'home_intro_image'));
-  assert.equal(fieldsForArea('home').some((field) => field.key === 'home_canva_url'), false);
+  assert.ok(fieldsForArea('home').some((field) => field.key === 'hero_title'));
+  assert.ok(fieldsForArea('home').some((field) => field.key === 'home_canva_url'));
   assert.equal(fieldByKey('library_clear_filters_label').default, 'Clear filters');
   assert.equal(fieldByKey('auth_login_title').default, 'Welcome back');
 });
@@ -26,8 +25,8 @@ test('catalog exposes global and page fields', () => {
 test('Hero controls expose visibility toggles and safe alignment choices', () => {
   const fields = fieldsForArea('home');
   const alignment = fieldByKey('hero_content_align');
-  const primary = fieldByKey('home_intro_primary_show');
-  const secondary = fieldByKey('home_intro_secondary_show');
+  const primary = fieldByKey('home_hero_cta_primary_show');
+  const secondary = fieldByKey('home_hero_cta_secondary_show');
   assert.equal(alignment.type, 'select');
   assert.deepEqual(alignment.options.map((option) => option.value), ['left', 'center', 'right']);
   assert.equal(primary.type, 'boolean');

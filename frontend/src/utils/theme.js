@@ -22,16 +22,9 @@ export const APPEARANCE_DEFAULTS = {
   hero_cta_text: 'Explore library',
   hero_cta_link: '/library',
   hero_content_align: 'left',
-  home_intro_eyebrow: 'HEBREW · TORAH · HOLIDAYS',
-  home_intro_title: 'WELCOME TO JEWISH EDUCATIONAL RESOURCES',
-  home_intro_lead: 'Ready-to-use Jewish learning materials for educators, schools, and families.',
-  home_intro_image: '/images/hero/hero-main-1200.webp',
-  home_intro_image_alt: 'Children learning together outdoors',
-  home_intro_primary_show: 'true',
-  home_intro_secondary_show: 'true',
-  home_intro_show: 'true',
-  // Legacy storage key retained only so older published data remains readable.
-  // The native homepage no longer renders external Canva documents.
+  // Optional showcase: it must only appear after an administrator explicitly
+  // publishes a Canva URL. Keeping this empty prevents examples from becoming
+  // visitor-facing content when the setting has never been saved.
   home_canva_url: '',
   home_hero_cta_primary_show: 'true',
   home_hero_cta_secondary_show: 'true',
@@ -124,17 +117,12 @@ export const LANDING_BLOCK_DEFS = {
     previewTone: 'sky',
     fields: [
       { key: 'hero_block_size', label: 'Block size', type: 'range', min: 75, max: 150, step: 5, hint: 'Hero height, spacing, and scale.' },
-      { key: 'home_intro_eyebrow', label: 'Small introduction', type: 'text' },
-      { key: 'home_intro_title', label: 'Title', type: 'text' },
-      { key: 'home_intro_lead', label: 'Supporting text', type: 'textarea' },
-      { key: 'home_intro_image', label: 'Main image', type: 'image' },
-      { key: 'home_intro_primary_show', label: 'Show primary button', type: 'checkbox' },
-      { key: 'home_intro_secondary_show', label: 'Show secondary button', type: 'checkbox' },
-      { key: 'hero_content_align', label: 'Text alignment', type: 'select', options: [
-        { value: 'left', label: 'Left' },
-        { value: 'center', label: 'Center' },
-        { value: 'right', label: 'Right' },
-      ] },
+      { key: 'hero_title', label: 'Title', type: 'text' },
+      { key: 'hero_lead', label: 'Supporting text', type: 'textarea', hint: 'Leave blank to use the site description.' },
+      { key: 'hero_cta_text', label: 'Button text', type: 'text' },
+      { key: 'hero_cta_link', label: 'Button link', type: 'text' },
+      { key: 'hero_bg_image', label: 'Background image', type: 'image' },
+      { key: 'hero_show_illustration', label: 'Show animated illustration', type: 'checkbox' },
     ],
   },
   library: {

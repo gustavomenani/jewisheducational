@@ -19,7 +19,6 @@ const props = defineProps({
   allowRemove: { type: Boolean, default: true },
   imgClass: { type: [String, Array, Object], default: '' },
   loading: { type: String, default: 'lazy' },
-  cover: { type: Boolean, default: false },
 });
 
 const builder = useBuilderStore();
@@ -57,17 +56,9 @@ const widthPct = computed(() => {
   const n = Number(builder.settingValue(`${props.settingKey}_width`, ''));
   return n >= 25 && n <= 100 ? n : null;
 });
-const rootStyle = computed(() => props.cover
-  ? { position: 'absolute', inset: '0', display: 'block', width: '100%', height: '100%' }
+const imgStyle = computed(() => widthPct.value
+  ? { width: `${widthPct.value}%`, maxWidth: '100%', height: 'auto' }
   : null);
-const imgStyle = computed(() => {
-  if (props.cover) {
-    return { width: '100%', maxWidth: 'none', height: '100%', objectFit: 'cover', objectPosition: 'center' };
-  }
-  return widthPct.value
-    ? { width: `${widthPct.value}%`, maxWidth: '100%', height: 'auto' }
-    : null;
-});
 const selected = computed(() => builder.editMode && builder.canEdit && builder.selectedSetting?.key === props.settingKey);
 
 function selectImage(event) {
@@ -148,7 +139,6 @@ onMounted(() => {
     }"
     :tabindex="isFocusableInEditor ? 0 : undefined"
     :role="isFocusableInEditor ? 'button' : undefined"
-    :style="rootStyle"
     @click="selectImage"
     @keydown="selectWithKeyboard"
     >
@@ -161,7 +151,7 @@ onMounted(() => {
         <i :class="uploading ? 'bi bi-arrow-repeat' : 'bi bi-image'"></i><span>{{ uploading ? 'Uploading' : 'Replace' }}</span>
         <input type="file" accept="image/jpeg,image/png,image/webp" :disabled="uploading" @change="uploadImage" />
       </label>
-      <label v-if="!cover" class="editable-image-size"><span>Size</span><input type="range" min="25" max="100" step="5" :value="widthPct || 100" @pointerdown="beginImageInlineChange" @focus="beginImageInlineChange" @input="updateWidth" @change="finishImageInlineChange" /></label>
+      <label class="editable-image-size"><span>Size</span><input type="range" min="25" max="100" step="5" :value="widthPct || 100" @pointerdown="beginImageInlineChange" @focus="beginImageInlineChange" @input="updateWidth" @change="finishImageInlineChange" /></label>
       <label v-if="altSettingKey" class="editable-image-alt"><span>Alt text</span><input type="text" :value="resolvedAlt" @focus="beginImageInlineChange" @input="updateAlt" @blur="finishImageInlineChange" /></label>
       <button v-if="removed" type="button" title="Show image" @click="restoreImage"><i class="bi bi-eye"></i></button>
       <button v-else-if="allowRemove" type="button" title="Hide image" @click="hideImage"><i class="bi bi-eye-slash"></i></button>

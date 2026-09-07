@@ -85,9 +85,6 @@ test('contextual inspector exposes constrained content, layout and safe actions'
   }
   assert.ok(inspector.includes("field.type === 'select' || field.type === 'align'"));
   assert.ok(inspector.includes('type="file" accept="image/jpeg,image/png,image/webp"'));
-  assert.match(inspector, /home_intro_primary.*home_intro_secondary/);
-  assert.ok(inspector.includes('home_intro_primary_show'));
-  assert.ok(inspector.includes('home_intro_secondary_show'));
 });
 
 test('inspector surfaces plain-language placement controls before advanced layout', () => {
