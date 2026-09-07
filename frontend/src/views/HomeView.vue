@@ -19,7 +19,6 @@ import {
 } from '@/utils/theme';
 import { DEFAULT_QUICK_TOPICS, normalizeQuickTopics, categoryVisibleInDraft as categoryVisibleInDraftImported } from '@/builder/contentModel';
 import { visibleCategoriesForVisitors } from '@/utils/categoryTree';
-import { canvaEmbedUrl } from '@/utils/canva';
 import {
   DEFAULT_SITE_DESCRIPTION,
   DEFAULT_SITE_NAME,
@@ -68,15 +67,15 @@ const settingVisible = (key, fallback = true) => {
   const value = s.value[key];
   return value === undefined || value === '' ? fallback : value !== 'false' && value !== false;
 };
-const showHero = computed(() => settingVisible('home_hero_show', isLandingBlockEnabled(s.value, 'hero')));
-const showHeroPrimary = computed(() => settingVisible('home_hero_cta_primary_show'));
-const showHeroSecondary = computed(() => settingVisible('home_hero_cta_secondary_show'));
-const showCards = computed(() => settingVisible('home_cards_show', isLandingBlockEnabled(s.value, 'library')));
-const showTopics = computed(() => settingVisible('home_topics_show'));
-const showFeatured = computed(() => settingVisible('home_featured_show'));
-const showRecent = computed(() => settingVisible('home_recent_show', isLandingBlockEnabled(s.value, 'recent')));
-const showBenefits = computed(() => settingVisible('home_benefits_show'));
-const showPrefooter = computed(() => settingVisible('home_prefooter_show'));
+const showHero = computed(() => settingVisible('home_intro_show', true));
+const showHeroPrimary = computed(() => settingVisible('home_intro_primary_show', true));
+const showHeroSecondary = computed(() => settingVisible('home_intro_secondary_show', true));
+const showCards = computed(() => settingVisible('home_cards_show', false));
+const showTopics = computed(() => settingVisible('home_topics_show', false));
+const showFeatured = computed(() => settingVisible('home_featured_show', false));
+const showRecent = computed(() => settingVisible('home_recent_show', false));
+const showBenefits = computed(() => settingVisible('home_benefits_show', false));
+const showPrefooter = computed(() => settingVisible('home_prefooter_show', false));
 const showContact = computed(() => settingVisible(
   'home_contact_show',
   settingVisible('block_contact_show', isLandingBlockEnabled(s.value, 'contact')),
@@ -136,9 +135,7 @@ async function submitContact() {
 }
 
 const heroTitle = computed(() => {
-  const val = settingText(s.value, 'hero_title', APPEARANCE_DEFAULTS.hero_title);
-  if (!val || val === 'ONDE O APRENDIZADO FLORESCE') return 'WHERE LEARNING FLOURISHES';
-  return val;
+  return settingText(s.value, 'home_intro_title', APPEARANCE_DEFAULTS.home_intro_title);
 });
 function isExternalUrl(value) {
   return /^https?:\/\//i.test(String(value || '').trim());
@@ -152,17 +149,13 @@ function navigationTarget(value, fallback) {
 }
 
 const heroLead = computed(() => {
-  const val = settingText(s.value, 'hero_lead', APPEARANCE_DEFAULTS.hero_lead);
-  if (!val || val === 'Hebrew, Torah, holidays, and more for Jewish early education and schools.') {
-    return 'Hebrew, Torah, holidays and more for early childhood Jewish education and schools.';
-  }
-  return val;
+  return settingText(s.value, 'home_intro_lead', APPEARANCE_DEFAULTS.home_intro_lead);
 });
 const heroPrimaryLink = computed(() =>
-  navigationTarget(settingText(s.value, 'home_hero_cta_primary_link', '/library'), '/library')
+  navigationTarget(settingText(s.value, 'home_intro_primary_link', '/library'), '/library')
 );
 const heroSecondaryLink = computed(() =>
-  navigationTarget(settingText(s.value, 'home_hero_cta_secondary_link', '/sign-up'), '/sign-up')
+  navigationTarget(settingText(s.value, 'home_intro_secondary_link', '/sign-up'), '/sign-up')
 );
 const heroContentAlign = computed(() => {
   const value = String(
@@ -181,16 +174,7 @@ const heroActionsStyle = computed(() => ({
 const guideLink = computed(() =>
   navigationTarget(settingText(s.value, 'home_ebook_url', '/library'), '/library')
 );
-const heroBgImage = computed(() => settingText(s.value, 'hero_bg_image'));
-const homeCanvaSource = computed(() => String(s.value.home_canva_url || '').trim());
-const homeCanvaEmbedUrl = computed(() => canvaEmbedUrl(homeCanvaSource.value));
-
-function selectHomeCanva(event) {
-  if (!builder.editMode || !builder.canEdit) return;
-  event?.preventDefault();
-  event?.stopPropagation();
-  builder.selectSetting(fieldByKey('home_canva_url'));
-}
+const heroImage = computed(() => settingText(s.value, 'home_intro_image', APPEARANCE_DEFAULTS.home_intro_image));
 
 function updateHomeSeo() {
   const siteName = settingText(s.value, 'site_name', DEFAULT_SITE_NAME) || DEFAULT_SITE_NAME;
@@ -200,20 +184,19 @@ function updateHomeSeo() {
     siteName,
     description,
     canonical: '/',
-    image: heroBgImage.value || undefined,
+    image: heroImage.value || undefined,
     type: 'website',
     jsonLd: [buildWebSiteSchema(siteName, description), buildOrganizationSchema(siteName, description)],
   });
 }
 
 watch(
-  () => [s.value.site_name, s.value.site_description, heroLead.value, heroBgImage.value],
+  () => [s.value.site_name, s.value.site_description, heroLead.value, heroImage.value],
   updateHomeSeo,
   { immediate: true }
 );
 
 const HERO_WORKSHEET = '/images/hero/hero-worksheet.png';
-const HERO_MASCOT = '/images/hero/mascot-bear.png';
 
 const editableResources = computed(() => {
   const draft = builder.contentDraft?.materials;
@@ -392,93 +375,65 @@ function selectContentFromCanvas(event, entity, item) {
       :style="{
         ...sectionOrderStyle('hero'),
         ...blockSizeStyle(s, 'hero'),
-        ...(heroBgImage ? { backgroundImage: `linear-gradient(rgba(238,243,247,0.92), rgba(238,243,247,0.92)), url(${mediaUrl(heroBgImage)})`, backgroundSize: 'cover' } : {}),
       }"
     >
-      <div class="container k5-hero-inner">
+      <div class="k5-hero-inner">
+        <div class="k5-hero-media">
+          <EditableImage
+            class="k5-hero-image-wrap"
+            setting-key="home_intro_image"
+            :default="APPEARANCE_DEFAULTS.home_intro_image"
+            alt-setting-key="home_intro_image_alt"
+            default-alt="Children learning together outdoors"
+            img-class="k5-hero-image"
+            loading="eager"
+            :cover="true"
+          />
+          <span class="k5-hero-brand-mark" aria-hidden="true">
+            <img src="/logo-mark.svg" alt="" />
+          </span>
+        </div>
         <div class="k5-hero-copy" :style="heroCopyStyle">
+          <EditableSetting
+            tag="p"
+            class="k5-hero-eyebrow"
+            setting-key="home_intro_eyebrow"
+            :default="APPEARANCE_DEFAULTS.home_intro_eyebrow"
+            placeholder="Small introduction…"
+          />
           <EditableSetting
             tag="h1"
             class="k5-hero-title"
-            setting-key="hero_title"
+            setting-key="home_intro_title"
             :default="heroTitle"
             placeholder="Hero title…"
           />
           <EditableSetting
             tag="p"
             class="k5-hero-lead"
-            setting-key="hero_lead"
+            setting-key="home_intro_lead"
             :default="heroLead"
             placeholder="Subtitle…"
           />
           <div class="k5-hero-actions" :style="heroActionsStyle">
             <template v-if="showHeroPrimary">
               <a v-if="isExternalUrl(heroPrimaryLink)" :href="heroPrimaryLink" target="_blank" rel="noopener" class="k5-hero-btn k5-hero-btn-primary">
-                <EditableSetting tag="span" setting-key="home_hero_cta_primary" :default="'Explore library'" link-key="home_hero_cta_primary_link" default-link="/library" placeholder="Primary button…" />
+                <EditableSetting tag="span" setting-key="home_intro_primary" :default="'Explore the library'" link-key="home_intro_primary_link" default-link="/library" placeholder="Primary button…" />
               </a>
               <RouterLink v-else :to="heroPrimaryLink" class="k5-hero-btn k5-hero-btn-primary">
-                <EditableSetting tag="span" setting-key="home_hero_cta_primary" :default="'Explore library'" link-key="home_hero_cta_primary_link" default-link="/library" placeholder="Primary button…" />
+                <EditableSetting tag="span" setting-key="home_intro_primary" :default="'Explore the library'" link-key="home_intro_primary_link" default-link="/library" placeholder="Primary button…" />
               </RouterLink>
             </template>
             <template v-if="showHeroSecondary">
               <a v-if="isExternalUrl(heroSecondaryLink)" :href="heroSecondaryLink" target="_blank" rel="noopener" class="k5-hero-btn k5-hero-btn-outline">
-                <EditableSetting tag="span" setting-key="home_hero_cta_secondary" :default="'Create free account'" link-key="home_hero_cta_secondary_link" default-link="/sign-up" placeholder="Secondary button…" />
+                <EditableSetting tag="span" setting-key="home_intro_secondary" :default="'Create a free account'" link-key="home_intro_secondary_link" default-link="/sign-up" placeholder="Secondary button…" />
               </a>
               <RouterLink v-else :to="heroSecondaryLink" class="k5-hero-btn k5-hero-btn-outline">
-                <EditableSetting tag="span" setting-key="home_hero_cta_secondary" :default="'Create free account'" link-key="home_hero_cta_secondary_link" default-link="/sign-up" placeholder="Secondary button…" />
+                <EditableSetting tag="span" setting-key="home_intro_secondary" :default="'Create a free account'" link-key="home_intro_secondary_link" default-link="/sign-up" placeholder="Secondary button…" />
               </RouterLink>
             </template>
           </div>
         </div>
-        <div class="k5-hero-visual">
-          <EditableImage
-            class="k5-hero-mascot-wrap"
-            setting-key="home_hero_image"
-            :default="HERO_MASCOT"
-            alt-setting-key="home_hero_image_alt"
-            default-alt="Educational mascot"
-            img-class="k5-hero-mascot"
-            loading="eager"
-          />
-        </div>
-      </div>
-    </section>
-
-    <section
-      v-if="homeCanvaEmbedUrl || (builder.editMode && builder.canEdit)"
-      class="k5-canva-showcase"
-      :class="{ 'is-empty': !homeCanvaEmbedUrl }"
-      :style="{ order: sectionOrderStyle('hero').order + 0.25 }"
-      aria-label="Featured presentation"
-    >
-      <div class="container k5-canva-showcase-inner">
-        <div v-if="homeCanvaEmbedUrl" class="k5-canva-showcase-frame-wrap">
-          <iframe
-            :src="homeCanvaEmbedUrl"
-            class="k5-canva-showcase-frame"
-            title="Featured Canva presentation"
-            loading="eager"
-            allow="autoplay; fullscreen"
-            allowfullscreen
-          ></iframe>
-          <button
-            v-if="builder.editMode && builder.canEdit"
-            type="button"
-            class="k5-canva-showcase-edit"
-            @click="selectHomeCanva"
-          >
-            <i class="bi bi-pencil-square"></i> Change or remove Canva design
-          </button>
-        </div>
-        <button
-          v-else
-          type="button"
-          class="k5-canva-showcase-empty"
-          @click="selectHomeCanva"
-        >
-          <i class="bi bi-plus-circle"></i>
-          <span><strong>Add a Canva design</strong><small>Paste a public Canva view or edit link.</small></span>
-        </button>
       </div>
     </section>
 

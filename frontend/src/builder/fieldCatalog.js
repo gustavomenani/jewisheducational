@@ -78,6 +78,18 @@ export const EDITOR_FIELDS = [
   field('global', 'Social links', 'social_youtube', 'YouTube URL', 'url', ''),
 
   // Home.
+  field('home', 'Welcome section', 'home_intro_eyebrow', 'Small introduction', 'text', APPEARANCE_DEFAULTS.home_intro_eyebrow),
+  field('home', 'Welcome section', 'home_intro_title', 'Main title', 'text', APPEARANCE_DEFAULTS.home_intro_title),
+  field('home', 'Welcome section', 'home_intro_lead', 'Supporting text', 'textarea', APPEARANCE_DEFAULTS.home_intro_lead),
+  field('home', 'Welcome section', 'home_intro_image', 'Main image', 'image', APPEARANCE_DEFAULTS.home_intro_image),
+  field('home', 'Welcome section', 'home_intro_image_alt', 'Main image alternative text', 'text', APPEARANCE_DEFAULTS.home_intro_image_alt),
+  field('home', 'Welcome section', 'home_intro_primary', 'Primary button label', 'text', 'Explore the library'),
+  field('home', 'Welcome section', 'home_intro_primary_link', 'Primary button destination', 'url', '/library'),
+  field('home', 'Welcome section', 'home_intro_primary_show', 'Show primary button', 'boolean', APPEARANCE_DEFAULTS.home_intro_primary_show),
+  field('home', 'Welcome section', 'home_intro_secondary', 'Secondary button label', 'text', 'Create a free account'),
+  field('home', 'Welcome section', 'home_intro_secondary_link', 'Secondary button destination', 'url', '/sign-up'),
+  field('home', 'Welcome section', 'home_intro_secondary_show', 'Show secondary button', 'boolean', APPEARANCE_DEFAULTS.home_intro_secondary_show),
+  field('home', 'Welcome section', 'home_intro_show', 'Show welcome section', 'boolean', APPEARANCE_DEFAULTS.home_intro_show),
   field('home', 'Hero', 'hero_title', 'Hero title', 'text', APPEARANCE_DEFAULTS.hero_title),
   field('home', 'Hero', 'hero_lead', 'Hero supporting text', 'textarea', APPEARANCE_DEFAULTS.hero_lead),
   field('home', 'Hero', 'home_hero_cta_primary', 'Primary button label', 'text', 'Explore library'),
@@ -96,14 +108,6 @@ export const EDITOR_FIELDS = [
   field('home', 'Hero', 'home_hero_image', 'Hero image', 'image', '/images/hero/mascot-bear.png'),
   field('home', 'Hero', 'home_hero_image_alt', 'Hero image alternative text', 'text', 'Educational mascot'),
   field('home', 'Hero', 'home_hero_show', 'Show hero section', 'boolean', 'true'),
-  field(
-    'home',
-    'Hero',
-    'home_canva_url',
-    'Featured Canva design link',
-    'url',
-    APPEARANCE_DEFAULTS.home_canva_url,
-  ),
   field('home', 'Cards', 'home_card_worksheets_title', 'Worksheets card title', 'text', 'Worksheets'),
   field(
     'home',

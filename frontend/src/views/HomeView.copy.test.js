@@ -31,9 +31,18 @@ test('public layout waits for published settings instead of flashing legacy defa
   assert.match(theme, /home_canva_url:\s*'',/);
 });
 
-test('homepage exposes the approved Canva design as an optional wide showcase', () => {
+test('homepage uses a native editable split hero instead of embedding Canva', () => {
   const source = readFileSync(new URL('./HomeView.vue', import.meta.url), 'utf8');
-  assert.ok(source.includes('homeCanvaEmbedUrl'));
-  assert.ok(source.includes('k5-canva-showcase'));
-  assert.ok(source.includes('home_canva_url'));
+  const styles = readFileSync(new URL('../assets/k5-home.css', import.meta.url), 'utf8');
+  assert.ok(source.includes('k5-hero-media'));
+  assert.ok(source.includes('k5-hero-eyebrow'));
+  assert.ok(source.includes('home_intro_title'));
+  assert.ok(source.includes('home_intro_image'));
+  assert.ok(source.includes(':cover="true"'));
+  assert.ok(source.includes('home_intro_primary'));
+  assert.equal(source.includes('<iframe'), false);
+  assert.equal(source.includes('homeCanvaEmbedUrl'), false);
+  assert.ok(styles.includes('grid-template-columns: minmax(0, 1.15fr) minmax(360px, 0.85fr)'));
+  assert.ok(styles.includes('.k5-hero-image'));
+  assert.ok(styles.includes('@media (max-width: 991px)'));
 });

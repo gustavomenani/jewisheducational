@@ -35,7 +35,7 @@ test('custom blocks are embedded in Home instead of replacing its dynamic page',
 });
 
 test('Home Hero buttons can be hidden and aligned from settings', () => {
-  for (const token of ['showHeroPrimary', 'showHeroSecondary', 'heroContentAlign', 'home_hero_cta_primary_show', 'home_hero_cta_secondary_show', 'hero_content_align']) {
+  for (const token of ['showHeroPrimary', 'showHeroSecondary', 'heroContentAlign', 'home_intro_primary_show', 'home_intro_secondary_show', 'hero_content_align']) {
     assert.ok(home.includes(token), `Missing Hero control: ${token}`);
   }
   assert.ok(home.includes('v-if="showHeroPrimary"'));

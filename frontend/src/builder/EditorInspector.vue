@@ -106,7 +106,7 @@ const sectionColumnsValue = computed(() => selectedSection.value?.columns?.map((
 const sectionSpace = computed(() => SECTION_SPACE_PRESETS.find((preset) => (
   preset.amount === Number(selectedSection.value?.props?.paddingY ?? 48)
 ))?.value || '');
-const isHeroButton = computed(() => ['home_hero_cta_primary', 'home_hero_cta_secondary'].includes(selectedSetting.value?.key));
+const isHeroButton = computed(() => ['home_intro_primary', 'home_intro_secondary'].includes(selectedSetting.value?.key));
 const isImageSetting = computed(() => selectedField.value?.type === 'image' || selectedSetting.value?.type === 'image');
 const isTextSetting = computed(() => {
   const type = selectedField.value?.type || selectedSetting.value?.type || 'text';
@@ -407,9 +407,9 @@ function moveSelected(direction) {
 
 function hideHeroButton() {
   if (!selectedSetting.value) return;
-  const visibilityKey = selectedSetting.value.key === 'home_hero_cta_primary'
-    ? 'home_hero_cta_primary_show'
-    : 'home_hero_cta_secondary_show';
+  const visibilityKey = selectedSetting.value.key === 'home_intro_primary'
+    ? 'home_intro_primary_show'
+    : 'home_intro_secondary_show';
   builder.setSetting(visibilityKey, 'false');
 }
 </script>
