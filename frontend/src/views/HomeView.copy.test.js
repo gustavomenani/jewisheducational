@@ -31,9 +31,9 @@ test('public layout waits for published settings instead of flashing legacy defa
   assert.match(theme, /home_canva_url:\s*'',/);
 });
 
-test('homepage exposes the approved Canva design as an optional wide showcase', () => {
+test('homepage does not expose the removed Canva showcase', () => {
   const source = readFileSync(new URL('./HomeView.vue', import.meta.url), 'utf8');
-  assert.ok(source.includes('homeCanvaEmbedUrl'));
-  assert.ok(source.includes('k5-canva-showcase'));
-  assert.ok(source.includes('home_canva_url'));
+  assert.ok(!source.includes('homeCanvaEmbedUrl'));
+  assert.ok(!source.includes('k5-canva-showcase'));
+  assert.ok(!source.includes('home_canva_url'));
 });

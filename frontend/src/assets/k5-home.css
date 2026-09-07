@@ -603,62 +603,6 @@
   background: #f4f9fc;
 }
 
-.k5-canva-showcase {
-  padding: clamp(1.25rem, 3vw, 2.75rem) 0;
-  background: linear-gradient(180deg, #f7fafc 0%, #eef6f8 100%);
-}
-.k5-canva-showcase-inner {
-  max-width: 1180px;
-}
-.k5-canva-showcase-frame-wrap {
-  position: relative;
-  overflow: hidden;
-  border: 1px solid #cfe0e8;
-  border-radius: 20px;
-  background: #fff;
-  box-shadow: 0 18px 45px rgba(31, 78, 107, 0.14);
-}
-.k5-canva-showcase-frame {
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  min-height: 320px;
-  border: 0;
-}
-.k5-canva-showcase-edit {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  border: 1px solid #278e98;
-  border-radius: 999px;
-  padding: 0.65rem 1rem;
-  background: #fff;
-  color: #145d66;
-  font-weight: 800;
-  box-shadow: 0 6px 18px rgba(31, 78, 107, 0.18);
-}
-.k5-canva-showcase-empty {
-  width: 100%;
-  min-height: 180px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.8rem;
-  border: 2px dashed #7dbdc4;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.7);
-  color: #145d66;
-}
-.k5-canva-showcase-empty > span { display: grid; text-align: left; }
-.k5-canva-showcase-empty small { color: #5a6a7a; font-weight: 500; }
-@media (max-width: 639px) {
-  .k5-canva-showcase-frame { min-height: 210px; }
-  .k5-canva-showcase-edit { top: 0.65rem; right: 0.65rem; font-size: 0.78rem; }
-}
-
 .k5-stack-category span {
   font-weight: 800;
   font-size: 0.78rem;

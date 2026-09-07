@@ -96,14 +96,6 @@ export const EDITOR_FIELDS = [
   field('home', 'Hero', 'home_hero_image', 'Hero image', 'image', '/images/hero/mascot-bear.png'),
   field('home', 'Hero', 'home_hero_image_alt', 'Hero image alternative text', 'text', 'Educational mascot'),
   field('home', 'Hero', 'home_hero_show', 'Show hero section', 'boolean', 'true'),
-  field(
-    'home',
-    'Hero',
-    'home_canva_url',
-    'Featured Canva design link',
-    'url',
-    APPEARANCE_DEFAULTS.home_canva_url,
-  ),
   field('home', 'Cards', 'home_card_worksheets_title', 'Worksheets card title', 'text', 'Worksheets'),
   field(
     'home',

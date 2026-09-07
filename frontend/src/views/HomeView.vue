@@ -19,7 +19,6 @@ import {
 } from '@/utils/theme';
 import { DEFAULT_QUICK_TOPICS, normalizeQuickTopics, categoryVisibleInDraft as categoryVisibleInDraftImported } from '@/builder/contentModel';
 import { visibleCategoriesForVisitors } from '@/utils/categoryTree';
-import { canvaEmbedUrl } from '@/utils/canva';
 import {
   DEFAULT_SITE_DESCRIPTION,
   DEFAULT_SITE_NAME,
@@ -182,16 +181,6 @@ const guideLink = computed(() =>
   navigationTarget(settingText(s.value, 'home_ebook_url', '/library'), '/library')
 );
 const heroBgImage = computed(() => settingText(s.value, 'hero_bg_image'));
-const homeCanvaSource = computed(() => String(s.value.home_canva_url || '').trim());
-const homeCanvaEmbedUrl = computed(() => canvaEmbedUrl(homeCanvaSource.value));
-
-function selectHomeCanva(event) {
-  if (!builder.editMode || !builder.canEdit) return;
-  event?.preventDefault();
-  event?.stopPropagation();
-  builder.selectSetting(fieldByKey('home_canva_url'));
-}
-
 function updateHomeSeo() {
   const siteName = settingText(s.value, 'site_name', DEFAULT_SITE_NAME) || DEFAULT_SITE_NAME;
   const description = settingText(s.value, 'site_description', DEFAULT_SITE_DESCRIPTION) || heroLead.value || DEFAULT_SITE_DESCRIPTION;
@@ -441,44 +430,6 @@ function selectContentFromCanvas(event, entity, item) {
             loading="eager"
           />
         </div>
-      </div>
-    </section>
-
-    <section
-      v-if="homeCanvaEmbedUrl || (builder.editMode && builder.canEdit)"
-      class="k5-canva-showcase"
-      :class="{ 'is-empty': !homeCanvaEmbedUrl }"
-      :style="{ order: sectionOrderStyle('hero').order + 0.25 }"
-      aria-label="Featured presentation"
-    >
-      <div class="container k5-canva-showcase-inner">
-        <div v-if="homeCanvaEmbedUrl" class="k5-canva-showcase-frame-wrap">
-          <iframe
-            :src="homeCanvaEmbedUrl"
-            class="k5-canva-showcase-frame"
-            title="Featured Canva presentation"
-            loading="eager"
-            allow="autoplay; fullscreen"
-            allowfullscreen
-          ></iframe>
-          <button
-            v-if="builder.editMode && builder.canEdit"
-            type="button"
-            class="k5-canva-showcase-edit"
-            @click="selectHomeCanva"
-          >
-            <i class="bi bi-pencil-square"></i> Change or remove Canva design
-          </button>
-        </div>
-        <button
-          v-else
-          type="button"
-          class="k5-canva-showcase-empty"
-          @click="selectHomeCanva"
-        >
-          <i class="bi bi-plus-circle"></i>
-          <span><strong>Add a Canva design</strong><small>Paste a public Canva view or edit link.</small></span>
-        </button>
       </div>
     </section>
 

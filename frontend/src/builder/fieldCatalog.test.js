@@ -17,7 +17,7 @@ test('catalog exposes all supported editor areas', () => {
 test('catalog exposes global and page fields', () => {
   assert.ok(fieldsForArea('global').some((field) => field.key === 'site_name'));
   assert.ok(fieldsForArea('home').some((field) => field.key === 'hero_title'));
-  assert.ok(fieldsForArea('home').some((field) => field.key === 'home_canva_url'));
+  assert.ok(!fieldsForArea('home').some((field) => field.key === 'home_canva_url'));
   assert.equal(fieldByKey('library_clear_filters_label').default, 'Clear filters');
   assert.equal(fieldByKey('auth_login_title').default, 'Welcome back');
 });
