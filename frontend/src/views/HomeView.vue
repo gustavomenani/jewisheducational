@@ -405,7 +405,7 @@ function selectContentFromCanvas(event, entity, item) {
           placeholder="Site introduction…"
         />
         <RouterLink to="/library" class="k5-hero-btn k5-hero-btn-primary k5-safe-home-action">
-          <EditableSetting tag="span" setting-key="hero_cta_text" :default="'Explore library'" placeholder="Button text…" />
+          <EditableSetting tag="span" setting-key="section_library_cta" :default="'Explore library'" placeholder="Button text…" />
         </RouterLink>
       </div>
     </section>
