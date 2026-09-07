@@ -38,10 +38,16 @@ test('homepage does not expose the removed Canva showcase', () => {
   assert.ok(!source.includes('home_canva_url'));
 });
 
-test('homepage keeps a clean entry visible when every editable section is hidden', () => {
+test('homepage restores the complete native layout when every editable section is hidden', () => {
   const source = readFileSync(new URL('./HomeView.vue', import.meta.url), 'utf8');
-  assert.ok(source.includes('showSafeHome'));
-  assert.ok(source.includes('k5-safe-home'));
-  assert.ok(source.includes('setting-key="site_name"'));
-  assert.ok(source.includes('to="/library"'));
+  const styles = readFileSync(new URL('../assets/k5-home.css', import.meta.url), 'utf8');
+  assert.ok(source.includes('restoreDefaultHome'));
+  assert.ok(source.includes('rawShowHero.value || restoreDefaultHome.value'));
+  assert.ok(source.includes('rawShowCards.value || restoreDefaultHome.value'));
+  assert.ok(source.includes('rawShowTopics.value || restoreDefaultHome.value'));
+  assert.ok(source.includes('rawShowFeatured.value || restoreDefaultHome.value'));
+  assert.ok(source.includes('rawShowRecent.value || restoreDefaultHome.value'));
+  assert.equal(source.includes('showSafeHome'), false);
+  assert.equal(source.includes('k5-safe-home'), false);
+  assert.equal(styles.includes('.k5-safe-home'), false);
 });

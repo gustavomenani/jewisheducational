@@ -67,13 +67,13 @@ const settingVisible = (key, fallback = true) => {
   const value = s.value[key];
   return value === undefined || value === '' ? fallback : value !== 'false' && value !== false;
 };
-const showHero = computed(() => settingVisible('home_hero_show', isLandingBlockEnabled(s.value, 'hero')));
+const rawShowHero = computed(() => settingVisible('home_hero_show', isLandingBlockEnabled(s.value, 'hero')));
 const showHeroPrimary = computed(() => settingVisible('home_hero_cta_primary_show'));
 const showHeroSecondary = computed(() => settingVisible('home_hero_cta_secondary_show'));
-const showCards = computed(() => settingVisible('home_cards_show', isLandingBlockEnabled(s.value, 'library')));
-const showTopics = computed(() => settingVisible('home_topics_show'));
-const showFeatured = computed(() => settingVisible('home_featured_show'));
-const showRecent = computed(() => settingVisible('home_recent_show', isLandingBlockEnabled(s.value, 'recent')));
+const rawShowCards = computed(() => settingVisible('home_cards_show', isLandingBlockEnabled(s.value, 'library')));
+const rawShowTopics = computed(() => settingVisible('home_topics_show'));
+const rawShowFeatured = computed(() => settingVisible('home_featured_show'));
+const rawShowRecent = computed(() => settingVisible('home_recent_show', isLandingBlockEnabled(s.value, 'recent')));
 const showBenefits = computed(() => settingVisible('home_benefits_show'));
 const showPrefooter = computed(() => settingVisible('home_prefooter_show'));
 const showContact = computed(() => settingVisible(
@@ -84,16 +84,24 @@ const showCustomContent = computed(() => {
   const published = builder.publishedLayout('home');
   return Boolean(published?.sections?.length || (builder.editMode && builder.canEdit && builder.useCanvas));
 });
-const showSafeHome = computed(() => !showCustomContent.value && ![
-  showHero.value,
-  showCards.value,
-  showTopics.value,
-  showFeatured.value,
-  showRecent.value,
+// Older editor revisions could publish every native Home section as hidden.
+// That invalid state must restore the established complete Home, not a blank
+// page or a replacement landing screen. Optional lower sections stay hidden.
+const restoreDefaultHome = computed(() => !showCustomContent.value && ![
+  rawShowHero.value,
+  rawShowCards.value,
+  rawShowTopics.value,
+  rawShowFeatured.value,
+  rawShowRecent.value,
   showBenefits.value,
   showPrefooter.value,
   showContact.value,
 ].some(Boolean));
+const showHero = computed(() => rawShowHero.value || restoreDefaultHome.value);
+const showCards = computed(() => rawShowCards.value || restoreDefaultHome.value);
+const showTopics = computed(() => rawShowTopics.value || restoreDefaultHome.value);
+const showFeatured = computed(() => rawShowFeatured.value || restoreDefaultHome.value);
+const showRecent = computed(() => rawShowRecent.value || restoreDefaultHome.value);
 
 const contactTitle = computed(() =>
   settingText(s.value, 'section_contact_title', APPEARANCE_DEFAULTS.section_contact_title)
@@ -189,9 +197,6 @@ const heroActionsStyle = computed(() => ({
 }));
 const guideLink = computed(() =>
   navigationTarget(settingText(s.value, 'home_ebook_url', '/library'), '/library')
-);
-const safeHomeLead = computed(() =>
-  settingText(s.value, 'site_tagline', 'Learn. Teach. Explore. — Free, Creative & Ready to Use')
 );
 const heroBgImage = computed(() => settingText(s.value, 'hero_bg_image'));
 function updateHomeSeo() {
@@ -386,29 +391,7 @@ function selectContentFromCanvas(event, entity, item) {
 
 <template>
   <div class="k5-home-page" style="display: flex; flex-direction: column">
-    <h1 v-if="!showHero && !showSafeHome" class="visually-hidden">{{ heroTitle || s.site_name || DEFAULT_SITE_NAME }}</h1>
-    <section v-if="showSafeHome" class="k5-safe-home" :style="sectionOrderStyle('hero')">
-      <div class="container k5-safe-home-inner">
-        <img class="k5-safe-home-mark" src="/logo-mark.svg?v=3" alt="" width="88" height="88" />
-        <EditableSetting
-          tag="h1"
-          class="k5-safe-home-title"
-          setting-key="site_name"
-          :default="DEFAULT_SITE_NAME"
-          placeholder="Site name…"
-        />
-        <EditableSetting
-          tag="p"
-          class="k5-safe-home-lead"
-          setting-key="site_tagline"
-          :default="safeHomeLead"
-          placeholder="Site introduction…"
-        />
-        <RouterLink to="/library" class="k5-hero-btn k5-hero-btn-primary k5-safe-home-action">
-          <EditableSetting tag="span" setting-key="section_library_cta" :default="'Explore library'" placeholder="Button text…" />
-        </RouterLink>
-      </div>
-    </section>
+    <h1 v-if="!showHero" class="visually-hidden">{{ heroTitle || s.site_name || DEFAULT_SITE_NAME }}</h1>
     <section
       v-if="showHero"
       class="k5-hero k5-block-sized"
