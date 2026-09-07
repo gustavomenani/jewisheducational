@@ -1,0 +1,48 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: jer-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME:-jewish_educational_resources}
+    volumes:
+      - jer_mysql_data:/var/lib/mysql
+    ports:
+      - "127.0.0.1:${JER_MYSQL_PORT:-7861}:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: jer-backend
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      PORT: 3000
+      NODE_ENV: production
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      DB_NAME: ${DB_NAME:-jewish_educational_resources}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: 7d
+      FRONTEND_URL: ${FRONTEND_URL:-https://jewish-educational-resources.web.app}
+      GA_MEASUREMENT_ID: ${GA_MEASUREMENT_ID:?GA_MEASUREMENT_ID must be provided}
+      UPLOAD_DIR: uploads
+    volumes:
+      - ../backend/uploads:/app/uploads
+    ports:
+      - "127.0.0.1:${JER_API_PORT:-7860}:3000"
+
+volumes:
+  jer_mysql_data:

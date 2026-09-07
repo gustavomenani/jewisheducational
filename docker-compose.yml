@@ -1,0 +1,70 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: jer-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-jer_root_pass}
+      MYSQL_DATABASE: ${DB_NAME:-jewish_educational_resources}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      # Bound to loopback only: the MySQL port must never be reachable from
+      # outside the host machine.
+      - "127.0.0.1:3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${MYSQL_ROOT_PASSWORD:-jer_root_pass}"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+      start_period: 20s
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: jer-backend
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      PORT: 3000
+      NODE_ENV: development
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD must be provided}
+      DB_NAME: ${DB_NAME:-jewish_educational_resources}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be provided}
+      JWT_EXPIRES_IN: 7d
+      FRONTEND_URL: http://localhost:5173
+      UPLOAD_DIR: uploads
+    volumes:
+      - ./backend:/app
+      - backend_node_modules:/app/node_modules
+      - uploads_data:/app/uploads
+    ports:
+      - "3000:3000"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: jer-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      VITE_API_PROXY: http://backend:3000
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+    ports:
+      - "5173:5173"
+
+volumes:
+  mysql_data:
+  uploads_data:
+  backend_node_modules:
+  frontend_node_modules:

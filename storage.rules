@@ -1,0 +1,10 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Covers are intentionally public because they are displayed on cards.
+    match /covers/{allPaths=**} { allow read: if true; allow write: if false; }
+    // Material files and editor staging objects are private. They are served
+    // through the authenticated download routes after access checks.
+    match /{allPaths=**} { allow read, write: if false; }
+  }
+}

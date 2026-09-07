@@ -1,0 +1,51 @@
+{
+  "hosting": {
+    "public": "frontend/dist",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      { "source": "/robots.txt", "function": "api" },
+      { "source": "/sitemap.xml", "function": "api" },
+      { "source": "/api/**", "function": "api" },
+      { "source": "/uploads/**", "function": "api" },
+      { "source": "**", "destination": "/index.html" }
+    ],
+    "headers": [
+      {
+        "source": "/api/**",
+        "headers": [
+          { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        ]
+      },
+      {
+        "source": "/admin/**",
+        "headers": [
+          { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        ]
+      },
+      {
+        "source": "/resource/*/download/**",
+        "headers": [
+          { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        ]
+      },
+      {
+        "source": "/resource/*/present/**",
+        "headers": [
+          { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        ]
+      },
+      {
+        "source": "**",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+        ]
+      },
+      {
+        "source": "/assets/**",
+        "headers": [
+          { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        ]
+      }
+    ]
+  }
+}

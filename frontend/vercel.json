@@ -1,0 +1,11 @@
+{
+  "buildCommand": "node -e \"throw new Error('Firebase-only deployment: use firebase deploy from the repository root')\"",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/((?!assets/).*)",
+      "destination": "/index.html"
+    }
+  ]
+}

@@ -1,0 +1,144 @@
+{
+  "hosting": {
+    "public": "frontend/dist",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      { "source": "/robots.txt", "function": "api" },
+      { "source": "/sitemap.xml", "function": "api" },
+      { "source": "/", "function": "api" },
+      { "source": "/library", "function": "api" },
+      { "source": "/library/**", "function": "api" },
+      { "source": "/resource/*/download/**", "destination": "/index.html" },
+      { "source": "/resource/*/present/**", "destination": "/index.html" },
+      { "source": "/resource/**", "function": "api" },
+      { "source": "/api/**", "function": "api" },
+      { "source": "/uploads/**", "function": "api" },
+      { "source": "**", "destination": "/index.html" }
+    ],
+    "headers": [
+      {
+        "source": "/api/**",
+        "headers": [
+          { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        ]
+      },
+      {
+        "source": "/admin",
+        "headers": [
+          { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        ]
+      },
+      {
+        "source": "/admin/**",
+        "headers": [
+          { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        ]
+      },
+      {
+        "source": "/resource/*/download/**",
+        "headers": [
+          { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        ]
+      },
+      {
+        "source": "/resource/*/present/**",
+        "headers": [
+          { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        ]
+      },
+      {
+        "source": "/login",
+        "headers": [
+          { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        ]
+      },
+      {
+        "source": "/sign-up",
+        "headers": [
+          { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        ]
+      },
+      {
+        "source": "/forgot-password",
+        "headers": [
+          { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        ]
+      },
+      {
+        "source": "/reset-password/**",
+        "headers": [
+          { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        ]
+      },
+      {
+        "source": "/my-account",
+        "headers": [
+          { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        ]
+      },
+      {
+        "source": "/profile",
+        "headers": [
+          { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        ]
+      },
+      {
+        "source": "/my-list",
+        "headers": [
+          { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        ]
+      },
+      {
+        "source": "**",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+        ]
+      },
+      {
+        "source": "/assets/**",
+        "headers": [
+          { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        ]
+      }
+    ]
+  },
+  "functions": [
+    {
+      "source": "backend",
+      "codebase": "api",
+      "runtime": "nodejs22",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "uploads",
+        "scripts",
+        "supabase",
+        ".env",
+        ".env.localdev",
+        ".env.example"
+      ],
+      "predeploy": ["npm run verify:release"]
+    }
+  ],
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "auth": {
+    "providers": {
+      "emailPassword": true,
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "Jewish Educational Resources",
+        "supportEmail": "ehudkwin@gmail.com",
+        "authorizedRedirectUris": [
+          "https://jewish-educational-resources.web.app",
+          "https://jewisheducationalresources.org",
+          "https://www.jewisheducationalresources.org"
+        ]
+      }
+    }
+  }
+}

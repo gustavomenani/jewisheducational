@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /login
+Disallow: /sign-up
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /my-account
+Disallow: /profile
+Disallow: /my-list
+Disallow: /resource/*/download/
+Disallow: /resource/*/present/
+
+Sitemap: https://jewisheducationalresources.org/sitemap.xml

@@ -1,0 +1,14 @@
+[
+  {
+    "origin": [
+      "http://localhost:5173",
+      "http://127.0.0.1:5173",
+      "https://jewisheducationalresources.org",
+      "https://www.jewisheducationalresources.org",
+      "https://jewish-educational-resources.web.app"
+    ],
+    "method": ["GET", "PUT", "POST", "OPTIONS"],
+    "responseHeader": ["Content-Type", "Content-Length", "Content-Range", "Range", "x-goog-resumable", "x-goog-upload-*"],
+    "maxAgeSeconds": 3600
+  }
+]
