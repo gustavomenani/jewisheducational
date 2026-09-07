@@ -30,9 +30,7 @@ const canvasAllowed = computed(() => true);
 const legacyCanvasAllowed = computed(() => builder.slug === 'home');
 
 const HOME_SECTION_DEFS = [
-  // The native welcome section replaces the legacy hero. Keep its visibility
-  // independent so an old `home_hero_show=false` cannot blank the new Home.
-  { id: 'hero', label: 'Welcome section', visibilityKey: 'home_intro_show', defaultVisible: true },
+  { id: 'hero', label: 'Hero', visibilityKey: 'home_hero_show', defaultVisible: true },
   { id: 'cards', label: 'Library cards', visibilityKey: 'home_cards_show', defaultVisible: true },
   { id: 'topics', label: 'Topics', visibilityKey: 'home_topics_show', defaultVisible: true },
   { id: 'featured', label: 'Featured materials', visibilityKey: 'home_featured_show', defaultVisible: true },

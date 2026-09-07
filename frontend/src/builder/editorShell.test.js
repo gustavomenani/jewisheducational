@@ -90,12 +90,6 @@ test('contextual inspector exposes constrained content, layout and safe actions'
   assert.ok(inspector.includes('home_intro_secondary_show'));
 });
 
-test('home section controls use the native welcome visibility key', () => {
-  const sidebar = source('EditorSidebar.vue');
-  assert.ok(sidebar.includes("visibilityKey: 'home_intro_show'"));
-  assert.ok(sidebar.includes('old `home_hero_show=false` cannot blank the new Home'));
-});
-
 test('inspector surfaces plain-language placement controls before advanced layout', () => {
   const inspector = source('EditorInspector.vue');
   for (const phrase of ['Place on page', 'Align left', 'Align center', 'Align right', 'Choose a width', 'Space around this item', 'Normal space', 'Section layout', 'Comfortable space']) {
