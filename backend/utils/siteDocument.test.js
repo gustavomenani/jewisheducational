@@ -42,3 +42,18 @@ test('server rejects executable markup, unsafe URLs and protected-zone escapes',
   })), /secure https/);
   assert.throws(() => validateSiteDocumentPayload(JSON.stringify({ version: 2, pages: { library: { slots: { 'inside-catalog': { sections: [] } } } } })), /unsafe insertion zone/);
 });
+
+test('Canva blocks publish only canonical Canva embeds with a bounded height', () => {
+  const raw = documentWith({ id: 'canva_1', type: 'canva', props: {
+    url: 'https://www.canva.com/design/DAGabc_123/shareKey/edit?utm_source=sharebutton',
+    height: 760, hidden: true, iframe: '<iframe src="https://example.com">',
+  } });
+  const block = JSON.parse(validateSiteDocumentPayload(raw)).pages.library.slots['before-catalog'].sections[0].columns[0].blocks[0];
+  assert.deepEqual(block.props, {
+    url: 'https://www.canva.com/design/DAGabc_123/shareKey/view', height: 760, hidden: true,
+  });
+  for (const url of ['javascript:alert(1)', 'https://example.com/design/DAGabc_123/view', 'https://www.canva.com:444/design/DAGabc_123/view']) {
+    assert.throws(() => validateSiteDocumentPayload(documentWith({ id: 'canva_1', type: 'canva', props: { url } })), /public Canva/);
+  }
+  assert.throws(() => validateSiteDocumentPayload(documentWith({ id: 'canva_1', type: 'canva', props: { url: '', height: 10000 } })), /Canva height/);
+});

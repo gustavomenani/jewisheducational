@@ -2,7 +2,7 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
-import { initAnalytics, trackPageView } from './analytics';
+import { startAnalytics, initAnalytics, trackPageView } from './analytics';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
@@ -19,6 +19,7 @@ function bootstrap() {
   const app = createApp(App);
   const pinia = createPinia();
   app.use(pinia);
+  startAnalytics();
   app.use(router);
   app.mount('#app');
 
@@ -27,15 +28,13 @@ function bootstrap() {
   // background while the app displays its normal loading states.
   const settingsStore = useSettingsStore(pinia);
   const authStore = useAuthStore(pinia);
-  void settingsStore.load().then(async () => {
-    // The database setting is authoritative. Initializing only after the
-    // settings request avoids briefly configuring an env ID and then
-    // replacing it with a second GA4 measurement ID.
+  const hydrateAnalytics = async () => {
     initAnalytics();
     await router.isReady();
     const current = router.currentRoute.value;
     trackPageView(current.fullPath, document.title, { bootstrap: true, persist: false });
-  }).catch(() => {});
+  };
+  void settingsStore.load().then(hydrateAnalytics, hydrateAnalytics).catch(() => {});
   void refreshAuthenticatedUser(authStore).catch(() => {});
 }
 

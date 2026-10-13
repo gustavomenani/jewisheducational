@@ -68,6 +68,19 @@ test('new editor blocks are deliberately limited to the simple client palette', 
   assert.equal(createSiteDocumentBlock('heading').type, 'heading');
   assert.equal(createSiteDocumentBlock('image').props.maxWidth, 100);
   assert.equal(createSiteDocumentBlock('video'), null);
+  assert.deepEqual(createSiteDocumentBlock('canva').props, { url: '', height: 560, hidden: false });
   assert.equal(pageIdForRouteSlug('category'), 'library');
   assert.equal(pageIdForRouteSlug('forgot-password'), 'auth');
+});
+
+test('Canva data survives document history and reloads without retaining unsafe iframe URLs', () => {
+  const document = emptySiteDocument();
+  const block = createSiteDocumentBlock('canva');
+  block.props = { url: 'https://www.canva.com/design/DAGabc_123/shareKey/edit?embed', height: 760, hidden: true };
+  document.pages.library.slots['before-library'].sections.push({ id: 'canva_section', columns: [{ id: 'canva_column', span: 12, blocks: [block] }] });
+  const reloaded = parseSiteDocument(JSON.stringify(document));
+  const saved = reloaded.pages.library.slots['before-library'].sections[0].columns[0].blocks[0];
+  assert.deepEqual(saved.props, { url: 'https://www.canva.com/design/DAGabc_123/shareKey/view', height: 760, hidden: true });
+  saved.props.url = 'https://example.com/design/evil/view';
+  assert.equal(normalizeSiteDocument(reloaded).pages.library.slots['before-library'].sections[0].columns[0].blocks[0].props.url, '');
 });

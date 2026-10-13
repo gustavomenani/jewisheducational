@@ -2,6 +2,7 @@ import api from '@/api';
 import { captureAttribution, getAttribution } from '@/utils/attribution';
 import { referrerHost } from '@/utils/attributionShared';
 import { useSettingsStore } from '@/stores';
+import { createGoogleAnalytics } from '@/utils/googleAnalytics';
 
 const GA_CONSOLE_URL = import.meta.env.VITE_GA_CONSOLE_URL
   || 'https://console.firebase.google.com/project/jewish-educational-resources/analytics';
@@ -28,17 +29,26 @@ const AUTHENTICATED_EVENTS = new Set([
   'download_started',
   'download_completed',
 ]);
-let firstGaPageViewMeasurementId = '';
+const googleAnalytics = typeof window === 'undefined' ? null : createGoogleAnalytics({
+  window,
+  document,
+  getMeasurementId,
+});
+
+function validMeasurementId(value) {
+  const id = String(value || '').trim().toUpperCase();
+  return /^G-[A-Z0-9]+$/.test(id) ? id : '';
+}
 
 export function getMeasurementId() {
   try {
     const settings = useSettingsStore();
-    const databaseId = String(settings.settings?.google_analytics_id || '').trim();
+    const databaseId = validMeasurementId(settings.settings?.google_analytics_id);
     if (databaseId) return databaseId;
   } catch {
     // The settings store is not available during the first synchronous boot.
   }
-  return String(import.meta.env.VITE_GA_MEASUREMENT_ID || '').trim();
+  return validMeasurementId(import.meta.env.VITE_GA_MEASUREMENT_ID);
 }
 
 export function getGaConsoleUrl() {
@@ -59,46 +69,19 @@ function getSessionId() {
   return id;
 }
 
-export function initAnalytics() {
+export function startAnalytics() {
   captureAttribution();
-  const measurementId = getMeasurementId();
-  if (!measurementId || typeof window === 'undefined') return;
-  const existing = document.getElementById('ga-script');
-  if (existing?.dataset.measurementId === measurementId && window.gtag) return;
-  existing?.remove();
+  googleAnalytics?.start();
+}
 
-  const script = document.createElement('script');
-  script.id = 'ga-script';
-  script.dataset.measurementId = measurementId;
-  script.async = true;
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
-  document.head.appendChild(script);
-
-  window.dataLayer = window.dataLayer || [];
-  window.gtag = function gtag(...args) {
-    window.dataLayer.push(args);
-  };
-  window.gtag('js', new Date());
-  window.gtag('config', measurementId, { send_page_view: false });
-  window.__jerGaMeasurementId = measurementId;
+export function initAnalytics() {
+  googleAnalytics?.initialize();
 }
 
 export function trackPageView(path, title = document.title, options = {}) {
   const attr = getAttribution();
 
-  const measurementId = getMeasurementId();
-  const isBootstrapDuplicate = options.bootstrap && firstGaPageViewMeasurementId === measurementId;
-  if (isAnalyticsEnabled() && window.gtag && !isBootstrapDuplicate) {
-    window.gtag('event', 'page_view', {
-      page_path: path,
-      page_title: title,
-      traffic_source: attr.source,
-      utm_source: attr.utm_source || undefined,
-      utm_medium: attr.utm_medium || undefined,
-      utm_campaign: attr.utm_campaign || undefined,
-    });
-    firstGaPageViewMeasurementId = measurementId;
-  }
+  googleAnalytics?.pageView(path, title, attr, options);
 
   if (options.persist === false) return;
   api.post('/analytics/pageview', {
@@ -123,14 +106,12 @@ export function trackDownload({
 }) {
   const label = fileLabel || fileName || 'file';
 
-  if (isAnalyticsEnabled() && window.gtag) {
-    window.gtag('event', 'file_download', {
-      resource_id: resourceId,
-      resource_title: resourceTitle,
-      file_id: fileId,
-      file_label: label,
-    });
-  }
+  googleAnalytics?.event('file_download', {
+    resource_id: resourceId,
+    resource_title: resourceTitle,
+    file_id: fileId,
+    file_label: label,
+  });
 }
 
 export function trackInteraction(eventName, payload = {}, options = {}) {
@@ -147,9 +128,7 @@ export function trackInteraction(eventName, payload = {}, options = {}) {
   );
   const eventPayload = { ...safePayload };
 
-  if (typeof window !== 'undefined' && isAnalyticsEnabled() && window.gtag) {
-    window.gtag('event', eventName, eventPayload);
-  }
+  googleAnalytics?.event(eventName, eventPayload);
 
   const path = typeof window !== 'undefined'
     ? `${window.location.pathname}${window.location.search}`

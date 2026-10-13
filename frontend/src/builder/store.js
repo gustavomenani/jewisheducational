@@ -15,6 +15,7 @@ import {
   normalizeLayout,
 } from './layout';
 import { defaultPropsFor } from './registry';
+import { canvaSourceUrl } from '@/utils/canva';
 import {
   applyContentOperation,
   cloneContent,
@@ -1248,6 +1249,7 @@ export const useBuilderStore = defineStore('builder', () => {
     const resolved = resolveDocumentPageId(pageId);
     const block = createSiteDocumentBlock(type);
     if (!block) return false;
+    if (type === 'canva') block.props.url = canvaSourceUrl(settingValue('home_canva_url', ''));
     let targetSectionId = null;
     const changed = mutateSiteDocument((document) => {
       const slot = documentSlotRef(document, resolved, zone);

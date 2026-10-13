@@ -8,6 +8,7 @@ import api from '@/api';
 import { mediaUrl } from '@/utils/media';
 import { useBuilderStore } from './store';
 import { normalizeTextStyle, textStyleToCss } from './textStyle';
+import CanvaBlock from './blocks/CanvaBlock.vue';
 
 const props = defineProps({
   pageId: { type: String, required: true },
@@ -345,8 +346,15 @@ async function uploadImage(event, block) {
                 <button type="button" class="is-danger" title="Delete" @click="builder.removeDocumentBlock(pageId, zone, block.id)"><i class="bi bi-trash3"></i></button>
               </div>
 
+              <CanvaBlock
+                v-if="block.type === 'canva'"
+                :block="block"
+                :editable="canEdit"
+                @update="builder.setDocumentBlockProps(pageId, zone, block.id, $event)"
+              />
+
               <component
-                v-if="block.type === 'heading'"
+                v-else-if="block.type === 'heading'"
                 :is="`h${block.props?.level || 2}`"
                 class="site-slot-editable-text site-slot-heading"
                 :style="blockTextStyle(block)"
@@ -410,6 +418,7 @@ async function uploadImage(event, block) {
               <button type="button" @click.stop="addBlock('heading', section)"><i class="bi bi-type-h1"></i>Text</button>
               <button type="button" @click.stop="addBlock('image', section)"><i class="bi bi-image"></i>Image</button>
               <button type="button" @click.stop="addBlock('button', section)"><i class="bi bi-hand-index-thumb"></i>Button</button>
+              <button type="button" @click.stop="addBlock('canva', section)"><i class="bi bi-window"></i>Canva</button>
             </div>
           </div>
         </div>

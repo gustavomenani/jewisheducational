@@ -9,6 +9,10 @@ const settingsStore = useSettingsStore();
 const form = ref({});
 const message = ref('');
 const error = ref('');
+const canvaDesignLink = computed({
+  get: () => form.value.home_canva_url || '',
+  set: value => { form.value.home_canva_url = value; },
+});
 
 const socialProfiles = [
   ['Facebook', 'social_facebook'],
@@ -40,6 +44,7 @@ onMounted(async () => {
     contact_notify_email: settingsStore.settings.contact_notify_email || DEFAULT_CONTACT_EMAIL,
     contact_redirect_url: settingsStore.settings.contact_redirect_url || '',
     contact_redirect_delay: Number(settingsStore.settings.contact_redirect_delay) || 0,
+    home_canva_url: settingsStore.settings.home_canva_url || '',
   };
 });
 
@@ -89,6 +94,8 @@ async function save() {
   try {
     const payload = {
       ...form.value,
+      home_canva_url: String(form.value.home_canva_url || '').trim(),
+      canva_integration_mode: String(form.value.home_canva_url || '').trim() ? 'canva' : 'native',
       download_limit_enabled: form.value.download_limit_enabled ? 'true' : 'false',
       download_limit_max: String(form.value.download_limit_max ?? 10),
       nav_max_top_level: String(form.value.nav_max_top_level ?? 0),
@@ -99,6 +106,8 @@ async function save() {
     };
     await api.put('/settings', { settings: payload });
     await settingsStore.load();
+    form.value.home_canva_url = settingsStore.settings.home_canva_url || '';
+    form.value.canva_integration_mode = settingsStore.settings.canva_integration_mode;
     message.value = 'Settings saved successfully.';
     setTimeout(() => { message.value = ''; }, 3000);
   } catch (err) {
@@ -149,6 +158,29 @@ async function save() {
             <MaterialTypeListEditor v-model="form.material_types" input-id="settings-material-types" placeholder="Example: Worksheet" />
             <div class="form-text">
               Click the icon or color circle to change it. This list appears on the resource form and as a Library filter.
+            </div>
+          </div>
+        </div>
+
+        <h2 class="h6 text-uppercase text-muted mb-3 mt-4" style="letter-spacing:0.05em">Canva home</h2>
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="admin-form-label" for="settings-home-canva-url">Canva design link</label>
+            <input id="settings-home-canva-url" v-model="canvaDesignLink" type="url" class="form-control" placeholder="https://www.canva.com/design/.../view" />
+            <div class="form-text">
+              Paste a public Canva design or canva.link URL and click Save settings to replace the home page. Edit and publish the design in Canva to update it. Add library and login buttons to the Canva design using the full site URLs ending in /library and /login. Search and downloads continue to work in the library. Leave this blank to use the saved site home.
+            </div>
+            <div class="mt-3">
+              <h3 class="h6">Additional Canva content on other pages</h3>
+              <p class="form-text mb-2">
+                In the site editor, choose Pages and select the page you want. Add a new responsive section, choose Canva, paste the public design link and click Apply Canva link. Click Publish to show it on the site.
+              </p>
+              <p class="form-text mb-2">
+                Each page uses its own Canva block. Edit the design and its button links in Canva.
+              </p>
+              <RouterLink to="/library?edit=1" class="btn btn-outline-primary btn-sm">
+                Add Canva to the library
+              </RouterLink>
             </div>
           </div>
         </div>
@@ -322,7 +354,7 @@ async function save() {
 
         <h2 class="h6 text-uppercase text-muted mb-3 mt-4" style="letter-spacing:0.05em">Google Analytics</h2>
         <p class="text-muted small mb-3">
-          Optional database ID in addition to <code>VITE_GA_MEASUREMENT_ID</code> at deployment. The <strong>Dashboard</strong> shows internal visits and links to the complete GA report.
+          This ID takes priority over the deployment default. The <strong>Dashboard</strong> shows internal visits and links to the complete Google Analytics report.
         </p>
         <div class="row g-3">
           <div class="col-md-6">

@@ -12,6 +12,7 @@ import CtaBlock from './blocks/CtaBlock.vue';
 import FeaturesBlock from './blocks/FeaturesBlock.vue';
 import AlertBlock from './blocks/AlertBlock.vue';
 import VideoBlock from './blocks/VideoBlock.vue';
+import CanvaBlock from './blocks/CanvaBlock.vue';
 
 export const BLOCK_TYPES = {
   heading: {
@@ -169,6 +170,16 @@ export const BLOCK_TYPES = {
       { key: 'maxWidth', label: 'Maximum width (%)', type: 'number' },
       { key: 'align', label: 'Alignment', type: 'select', options: ['center', 'left', 'right'] },
       { key: 'title', label: 'Caption / Title', type: 'text', clearable: true },
+    ],
+  },
+  canva: {
+    label: 'Canva',
+    icon: 'bi-window',
+    component: CanvaBlock,
+    defaults: { url: '', height: 560, hidden: false },
+    fields: [
+      { key: 'url', label: 'Canva design link', type: 'text' },
+      { key: 'height', label: 'Height (px)', type: 'number' },
     ],
   },
   spacer: {

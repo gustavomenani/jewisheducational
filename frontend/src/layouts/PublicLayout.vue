@@ -15,6 +15,8 @@ import EditableContentText from '@/builder/EditableContentText.vue';
 import EditableImage from '@/builder/EditableImage.vue';
 import SiteContentSlot from '@/builder/SiteContentSlot.vue';
 import { useBuilderStore } from '@/builder/store';
+import CanvaHome from '@/components/CanvaHome.vue';
+import { canvaEmbedUrl, canvaSourceUrl } from '@/utils/canva';
 
 const auth = useAuthStore();
 const settings = useSettingsStore();
@@ -73,6 +75,11 @@ const siteSettings = computed(() => ({
   ...(builder.editMode && builder.canEdit ? builder.pendingSettings : {}),
 }));
 const siteName = computed(() => siteSettings.value.site_name || 'Jewish Educational Resources');
+const homeCanvaSourceUrl = computed(() => canvaSourceUrl(siteSettings.value.home_canva_url));
+const homeCanvaEmbedUrl = computed(() => canvaEmbedUrl(homeCanvaSourceUrl.value));
+const showCanvaHome = computed(() => route.name === 'home'
+  && Boolean(homeCanvaEmbedUrl.value)
+  && !(builder.editMode && builder.canEdit));
 const footerTagline = computed(() => {
   const custom = siteSettings.value.footer_tagline;
   if (custom) return custom;
@@ -381,6 +388,12 @@ onUnmounted(() => {
         <button type="button" class="btn btn-primary" @click="settings.load">Try again</button>
       </template>
     </div>
+    <CanvaHome
+      v-else-if="showCanvaHome"
+      :embed-url="homeCanvaEmbedUrl"
+      :source-url="homeCanvaSourceUrl"
+      :site-name="siteName"
+    />
     <div v-else class="d-flex flex-column min-vh-100 k5-site editor-preview-canvas">
     <header class="edu-header">
       <div class="container">
@@ -807,6 +820,6 @@ onUnmounted(() => {
 
     </div>
 
-    <template v-if="settings.ready"><EditorWorkspace /></template>
+    <template v-if="settings.ready && !showCanvaHome"><EditorWorkspace /></template>
   </div>
 </template>

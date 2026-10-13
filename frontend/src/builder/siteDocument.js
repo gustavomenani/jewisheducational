@@ -12,6 +12,7 @@ import {
   uid,
 } from './layout.js';
 import { normalizeTextStyle } from './textStyle.js';
+import { canvaSourceUrl } from '../utils/canva.js';
 
 export const SITE_DOCUMENT_VERSION = 2;
 export const SITE_DOCUMENT_KEY = 'site_document_v2_published';
@@ -27,7 +28,7 @@ export const SITE_DOCUMENT_PAGE_ZONES = Object.freeze({
 });
 
 export const SITE_DOCUMENT_PAGE_IDS = Object.freeze(Object.keys(SITE_DOCUMENT_PAGE_ZONES));
-export const SITE_DOCUMENT_BASIC_BLOCK_TYPES = Object.freeze(['heading', 'paragraph', 'image', 'button']);
+export const SITE_DOCUMENT_BASIC_BLOCK_TYPES = Object.freeze(['heading', 'paragraph', 'image', 'button', 'canva']);
 // Existing Home layouts can still contain the advanced block types. They are
 // retained by the legacy renderer; the v2 document accepts them only so a
 // future migration never turns a previously valid layout into an unknown one.
@@ -41,6 +42,7 @@ const BLOCK_DEFAULTS = Object.freeze({
   paragraph: { text: 'Write your text here.', align: 'left', color: '', textStyle: {} },
   image: { src: '', alt: '', caption: '', link: '', align: 'center', size: 'large', radius: 12, maxWidth: 100 },
   button: { text: 'Click here', link: '/', align: 'left', variant: 'primary' },
+  canva: { url: '', height: 560, hidden: false },
   spacer: { height: 32 },
   divider: { color: '#dce8f0' },
   cta: { title: 'Ready to get started?', subtitle: '', buttonText: 'Get started', buttonLink: '/', buttonVariant: 'primary', bgStyle: 'gradient', bgColor: '#3bafb8', textColor: '#ffffff', align: 'center' },
@@ -118,6 +120,10 @@ function normalizeBlockProps(type, raw = {}) {
     props.link = safeUrl(source.link) || '/';
     props.align = safeAlign(source.align, defaults.align);
     props.variant = ['primary', 'secondary', 'outline'].includes(String(source.variant)) ? String(source.variant) : defaults.variant;
+  } else if (type === 'canva') {
+    props.url = canvaSourceUrl(source.url);
+    props.height = Math.round(safeNumber(source.height, 320, 1200, defaults.height));
+    props.hidden = Boolean(source.hidden);
   } else {
     // Advanced legacy props are retained as plain text/number data. Rendering
     // remains owned by the existing legacy block components.

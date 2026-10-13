@@ -1029,6 +1029,16 @@ router.delete('/uploads/:uploadId', authenticate, requireAdmin, async (req, res)
   res.json({ ok: true });
 });
 
+router.post('/canva/resolve', authenticate, requireAdmin, async (req, res) => {
+  const requested = req.body?.url;
+  if (typeof requested !== 'string' || requested.length > 2048) {
+    return res.status(400).json({ error: 'Enter a public Canva design or canva.link URL.' });
+  }
+  const url = await resolveCanvaSourceUrl(requested);
+  if (!url) return res.status(400).json({ error: 'Enter a public Canva design or canva.link URL.' });
+  res.json({ url });
+});
+
 router.get('/content', authenticate, requireAdmin, async (req, res) => {
   res.json(await loadEditorContent());
 });

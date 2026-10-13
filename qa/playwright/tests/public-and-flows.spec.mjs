@@ -45,6 +45,13 @@ test.beforeAll(async ({ playwright }) => {
   expect(login.ok()).toBeTruthy();
   adminSession = await login.json();
 
+  // These flows exercise catalog controls, which are optional on /library.
+  const settings = await api.put('/api/settings', {
+    headers: { Authorization: `Bearer ${adminSession.token}` },
+    data: { settings: { library_root_catalog_show: 'true', google_analytics_id: '' } },
+  });
+  expect(settings.ok()).toBeTruthy();
+
   const resourceResponse = await api.get(`/api/resources/${RESOURCE_SLUG}`, {
     headers: { Authorization: `Bearer ${adminSession.token}` },
   });
@@ -112,14 +119,14 @@ test('class level filter stays visible after the pointer leaves the sidebar', as
 
   const panel = page.locator('#library-grade-filter-sidebar');
   await expect(panel).toBeVisible();
-  await expect(panel.getByRole('button', { name: 'Basic', exact: true })).toBeVisible();
+  await expect(panel.getByRole('button', { name: 'Beginner', exact: true })).toBeVisible();
   await expect(panel.getByRole('button', { name: 'Intermediate', exact: true })).toBeVisible();
   await expect(panel.getByRole('button', { name: 'Advanced', exact: true })).toBeVisible();
 
   await page.mouse.move(900, 500);
   await expect(panel).toBeVisible();
 
-  const basic = panel.getByRole('button', { name: 'Basic', exact: true });
+  const basic = panel.getByRole('button', { name: 'Beginner', exact: true });
   await basic.click();
   await expect(page).toHaveURL(/grade=Basic/);
   await expect(basic).toHaveAttribute('aria-pressed', 'true');

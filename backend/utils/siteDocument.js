@@ -1,5 +1,6 @@
 // Validation boundary for the visual SiteDocument. The browser may create
 // drafts freely, but only this narrow presentational schema can be published.
+import { canvaSourceUrl } from './canva.js';
 export const SITE_DOCUMENT_KEY = 'site_document_v2_published';
 export const SITE_DOCUMENT_VERSION = 2;
 export const SITE_DOCUMENT_MAX_BYTES = 512 * 1024;
@@ -13,7 +14,7 @@ export const SITE_DOCUMENT_PAGE_ZONES = Object.freeze({
   global: ['after-header', 'before-footer'],
 });
 
-const BASIC_BLOCK_TYPES = new Set(['heading', 'paragraph', 'image', 'button']);
+const BASIC_BLOCK_TYPES = new Set(['heading', 'paragraph', 'image', 'button', 'canva']);
 const FONT_WEIGHTS = new Set(['400', '500', '600', '700', '800']);
 const ALIGNS = new Set(['left', 'center', 'right', 'justify']);
 
@@ -120,6 +121,16 @@ function normalizeBlockProps(type, raw) {
       size,
       radius: Math.round(boundedNumber(raw.radius, 'Image radius', 0, 64, 12)),
       maxWidth: Math.round(boundedNumber(raw.maxWidth, 'Image width', 25, 100, 100)),
+    };
+  }
+  if (type === 'canva') {
+    const requested = optionalString(raw.url, 'Canva link', 2048).trim();
+    const url = canvaSourceUrl(requested);
+    if (requested && !url) throw inputError('Use a public Canva design link.');
+    return {
+      url,
+      height: Math.round(boundedNumber(raw.height, 'Canva height', 320, 1200, 560)),
+      hidden: raw.hidden === true,
     };
   }
   const align = raw.align === undefined ? 'left' : String(raw.align);

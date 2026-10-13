@@ -22,7 +22,7 @@ const settings = useSettingsStore();
 const router = useRouter();
 const route = useRoute();
 
-const basicBlocks = computed(() => BLOCK_LIBRARY.filter((item) => ['heading', 'paragraph', 'image', 'button'].includes(item.type)));
+const basicBlocks = computed(() => BLOCK_LIBRARY.filter((item) => ['heading', 'paragraph', 'image', 'button', 'canva'].includes(item.type)));
 const mediaBlocks = computed(() => BLOCK_LIBRARY.filter((item) => ['video', 'cta', 'features', 'alert'].includes(item.type)));
 // Every editor page receives a SiteDocument v2 slot. The legacy Home canvas
 // is still reachable under More options so existing layouts remain intact.
@@ -219,7 +219,7 @@ onUnmounted(() => window.removeEventListener('editor:page-navigation-confirmed',
         <div><span class="editor-kicker">Build your page</span><h2>Insert</h2></div>
         <button type="button" class="editor-help-link" title="Editor help" @click="emit('help')"><i class="bi bi-question-circle"></i></button>
       </div>
-      <p class="editor-panel-intro">Choose Text, Image or Button to add in this page's safe visual areas. Click directly in the preview to edit it.</p>
+      <p class="editor-panel-intro">Add Text, Image, Button or Canva to this page. Paste a Canva link to show your design here, then publish.</p>
       <div class="editor-quick-start-card">
         <strong><i class="bi bi-lightbulb"></i> Three easy steps</strong>
         <ol><li>Click and type in the preview.</li><li>Add a safe section when needed.</li><li>Publish when ready.</li></ol>
@@ -237,7 +237,7 @@ onUnmounted(() => window.removeEventListener('editor:page-navigation-confirmed',
       <section class="editor-palette-group">
         <h3>Section</h3>
         <div class="editor-preset-list">
-          <button type="button" class="editor-preset-card" @click="addSection"><i class="bi bi-square-dashed"></i><span><strong>New responsive section</strong><small>Add text, image or button inside it</small></span></button>
+          <button type="button" class="editor-preset-card" @click="addSection"><i class="bi bi-square-dashed"></i><span><strong>New responsive section</strong><small>Add text, image, button or Canva inside it</small></span></button>
         </div>
       </section>
 

@@ -69,7 +69,8 @@ router.beforeEach((to) => {
   if (to.meta.guest && auth.isLoggedIn) return { name: 'home' };
 });
 
-router.afterEach((to) => {
+router.afterEach((to, from, failure) => {
+  if (failure) return;
   applyRouteSeo(to);
   trackPageView(to.fullPath, document.title);
 });

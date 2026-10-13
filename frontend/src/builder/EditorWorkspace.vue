@@ -256,6 +256,12 @@ watch(sidebarOpen, () => {
   if (builder.editMode) updatePreviewFit();
 });
 
+watch(() => builder.selectedBlock?.id, (id) => {
+  if (id && builder.editMode && builder.settingValue('canva_integration_mode', '') === 'native') {
+    openInspector();
+  }
+});
+
 watch(() => route.fullPath, () => {
   if (builder.editMode) closeInspector();
 });

@@ -1,0 +1,176 @@
+/* The Canva palette belongs to the working public pages, including forms,
+   catalog controls and downloads. Editor/admin chrome keeps its own layout. */
+.editor-preview-stage .k5-site {
+  --canva-navy: var(--edu-teal, #003366);
+  --canva-dark: var(--edu-teal-dark, #00264d);
+  --canva-cream: var(--edu-white, #f4f0e6);
+  --canva-border: var(--edu-border, #d9d5ca);
+  --canva-secondary: var(--edu-purple, #156782);
+  --canva-muted: var(--edu-text-muted, #51657a);
+  --k5-navy: var(--canva-navy);
+  --k5-navy-dark: var(--canva-dark);
+  --k5-green: var(--canva-navy);
+  --k5-green-dark: var(--canva-dark);
+  --k5-orange: var(--canva-navy);
+  --k5-orange-dark: var(--canva-dark);
+  --k5-hero-bg: var(--canva-cream);
+  --color-primary: var(--canva-navy);
+  --color-secondary: var(--canva-secondary);
+  background: var(--canva-cream);
+  color: var(--canva-navy);
+  font-family: var(--jer-font, Arial, sans-serif);
+}
+.editor-preview-stage .k5-site .edu-header {
+  background: var(--canva-cream);
+  border-bottom: 1px solid var(--canva-border);
+}
+.editor-preview-stage .k5-site .k5-header-top { min-height: 84px; padding-top: 16px; padding-bottom: 16px; }
+.editor-preview-stage .k5-site .k5-logo-name,
+.editor-preview-stage .k5-site .k5-logo-mark { color: var(--canva-navy); font-weight: 800; }
+.editor-preview-stage .k5-site .k5-tagline { color: var(--canva-muted); border-color: var(--canva-border); }
+.editor-preview-stage .k5-site .k5-btn-signup,
+.editor-preview-stage .k5-site .k5-btn-login {
+  border: 1px solid var(--canva-navy);
+  border-radius: 8px;
+  padding: 9px 14px;
+  background: transparent;
+  color: var(--canva-navy);
+}
+.editor-preview-stage .k5-site .k5-btn-login { background: var(--canva-navy); color: #fff; }
+.editor-preview-stage .k5-site .k5-search-form { border: 1px solid #c5c8c4; border-radius: 8px; overflow: hidden; }
+.editor-preview-stage .k5-site .k5-search-input { background: #fffdf8; color: var(--canva-navy); }
+.editor-preview-stage .k5-site .k5-search-submit { background: var(--canva-navy); color: #fff; }
+.editor-preview-stage .k5-site .k5-nav-bar { border-top-color: #e1ddd3; padding-top: 10px; padding-bottom: 10px; gap: 10px; }
+.editor-preview-stage .k5-site .k5-nav-link { color: var(--canva-navy); font-weight: 700; }
+.editor-preview-stage .k5-site .k5-nav-link:hover,
+.editor-preview-stage .k5-site .k5-nav-link.active { color: var(--canva-secondary); background: #e9e4d8; }
+.editor-preview-stage .k5-site .k5-top-nav-dropdown { background: #fffdf8; border-color: var(--canva-border); }
+.editor-preview-stage .k5-site .k5-user-dropdown { background: #fffdf8; border-color: var(--canva-border); }
+.editor-preview-stage .k5-site .k5-custom-content { margin: 0; }
+.editor-preview-stage .k5-site .k5-home-page:has(.k5-custom-content h1) > h1.visually-hidden { display: none; }
+.editor-preview-stage .k5-site .k5-custom-content .br-section { padding-left: 32px; padding-right: 32px; }
+.editor-preview-stage .k5-site .k5-custom-content .br-section:first-child .br-row { column-gap: 24px; align-items: center; }
+.editor-preview-stage .k5-site .k5-custom-content .br-section:nth-child(2) .br-row { column-gap: 24px; align-items: center; }
+.editor-preview-stage .k5-site .k5-custom-content:not(.edit-mode) .br-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+.editor-preview-stage .k5-site .k5-custom-content:not(.edit-mode) .br-block { padding: 0; }
+.editor-preview-stage .k5-site .k5-custom-content .br-section:first-child .br-col:first-child .br-block:first-child { margin-bottom: 48px !important; }
+.editor-preview-stage .k5-site .k5-custom-content .br-section:first-child .br-col:first-child .br-block:first-child h2 { font-size: 24px; font-weight: 800; }
+.editor-preview-stage .k5-site .k5-custom-content h1 { white-space: pre-line; font-size: clamp(40px, 4.7vw, 68px); font-weight: 900; letter-spacing: -2px; line-height: 1.02; }
+.editor-preview-stage .k5-site .k5-custom-content .br-section:first-child p { max-width: 590px; margin: 32px auto 38px; }
+.editor-preview-stage .k5-site .k5-custom-content .br-section:nth-child(2) p { margin: 22px auto; max-width: 570px; }
+.editor-preview-stage .k5-site .k5-custom-content .br-section:nth-child(2) h2 { font-size: 48px; font-weight: 900; letter-spacing: -1.4px; }
+.editor-preview-stage .k5-site .k5-custom-content .image-block { margin: 0; }
+.editor-preview-stage .k5-site .k5-custom-content .image-block img { display: block; width: 100%; border-radius: 20px; }
+.editor-preview-stage .k5-site .k5-custom-content .br-section:first-child .image-block img { aspect-ratio: 1088 / 1328; object-fit: cover; }
+.editor-preview-stage .k5-site .k5-custom-content .builder-btn {
+  padding: 12px 0;
+  gap: 16px;
+  color: var(--canva-navy);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  font-size: 17px;
+  font-weight: 800;
+}
+.editor-preview-stage .k5-site .k5-custom-content .builder-btn .btn-icon { order: 2; font-size: 28px; }
+.editor-preview-stage .k5-site .k5-custom-content .builder-btn:hover { color: var(--canva-secondary); box-shadow: none; }
+.editor-preview-stage .k5-site .k5-home-page > section:not(.k5-custom-content) { background: var(--canva-cream); }
+.editor-preview-stage .k5-site .k5-section-title,
+.editor-preview-stage .k5-site .k5-title,
+.editor-preview-stage .k5-site .k5-hero-title { color: var(--canva-navy); font-weight: 800; letter-spacing: -0.8px; }
+.editor-preview-stage .k5-site .k5-recent-section { padding-top: 64px; padding-bottom: 64px; }
+.editor-preview-stage .k5-site .k5-recent-card { background: #fffdf8; border: 1px solid var(--canva-border); border-radius: 16px; box-shadow: none; overflow: hidden; }
+.editor-preview-stage .k5-site .k5-recent-cat { color: var(--canva-secondary); }
+.editor-preview-stage .k5-site .k5-recent-body h3 { color: var(--canva-navy); }
+.editor-preview-stage .k5-site .library-k5-page { background: var(--canva-cream); padding-top: 36px; padding-bottom: 64px; }
+.editor-preview-stage .k5-site .k5-sidebar { background: #fffdf8; border: 1px solid var(--canva-border); border-radius: 16px; overflow: hidden; }
+.editor-preview-stage .k5-site .k5-sidebar-head { background: var(--canva-navy); color: #fff; padding: 18px; }
+.editor-preview-stage .k5-site .k5-sidebar-row { border-color: #e5e0d6; }
+.editor-preview-stage .k5-site .k5-sidebar-link { color: var(--canva-navy); }
+.editor-preview-stage .k5-site .k5-sidebar-link.active { background: #e9e4d8; color: var(--canva-navy); }
+.editor-preview-stage .k5-site .k5-grade-filter { background: #fffdf8; border-color: var(--canva-border); border-radius: 16px; }
+.editor-preview-stage .k5-site .k5-grade-filter-option.active { background: #e9e4d8; border-color: var(--canva-navy); color: var(--canva-navy); }
+.editor-preview-stage .k5-site .k5-subtopic-btn { background: #fffdf8; border-color: var(--canva-border); color: var(--canva-navy); border-radius: 8px; }
+.editor-preview-stage .k5-site .k5-subtopic-btn:hover { border-color: var(--canva-navy); background: #e9e4d8; color: var(--canva-navy); }
+.editor-preview-stage .k5-site .k5-title { font-size: clamp(28px, 3vw, 42px); }
+.editor-preview-stage .k5-site .k5-catalog-card { background: #fffdf8; border: 1px solid var(--canva-border); border-radius: 16px; box-shadow: none; overflow: hidden; }
+.editor-preview-stage .k5-site .k5-catalog-card:hover { border-color: #a6a992; box-shadow: 0 8px 24px #0033660d; }
+.editor-preview-stage .k5-site .k5-catalog-thumb { background: #eee9df; }
+.editor-preview-stage .k5-site .k5-catalog-card h3,
+.editor-preview-stage .k5-site .k5-catalog-card h4,
+.editor-preview-stage .k5-site .k5-catalog-title { color: var(--canva-navy); }
+.editor-preview-stage .k5-site .search-panel,
+.editor-preview-stage .k5-site .library-filters { background: #fffdf8; border-color: var(--canva-border); border-radius: 16px; }
+.editor-preview-stage .k5-site .form-control,
+.editor-preview-stage .k5-site .form-select { border-color: #c8c9c0; border-radius: 8px; background-color: #fffdf8; color: var(--canva-navy); }
+.editor-preview-stage .k5-site .form-control:focus,
+.editor-preview-stage .k5-site .form-select:focus { border-color: var(--canva-secondary); box-shadow: 0 0 0 3px #15678222; }
+.editor-preview-stage .k5-site .btn-primary,
+.editor-preview-stage .k5-site .btn-edu-pill,
+.editor-preview-stage .k5-site .btn-download,
+.editor-preview-stage .k5-site .download-main-btn { background: var(--canva-navy); border-color: var(--canva-navy); color: #fff; border-radius: 8px; }
+.editor-preview-stage .k5-site .btn-primary:hover,
+.editor-preview-stage .k5-site .btn-edu-pill:hover { background: var(--canva-dark); border-color: var(--canva-dark); color: #fff; }
+.editor-preview-stage .k5-site .btn-outline-primary,
+.editor-preview-stage .k5-site .btn-outline-secondary { border-color: var(--canva-navy); color: var(--canva-navy); background: transparent; border-radius: 8px; }
+.editor-preview-stage .k5-site .btn-outline-primary:hover,
+.editor-preview-stage .k5-site .btn-outline-secondary:hover { background: var(--canva-navy); color: #fff; }
+.editor-preview-stage .k5-site .library-chip,
+.editor-preview-stage .k5-site .library-active-tag { border-color: var(--canva-border); background: #fffdf8; color: var(--canva-navy); }
+.editor-preview-stage .k5-site .library-chip.active { border-color: var(--canva-navy); background: var(--canva-navy); color: #fff; }
+.editor-preview-stage .k5-site .resource-k5-page,
+.editor-preview-stage .k5-site .download-page { background: var(--canva-cream); }
+.editor-preview-stage .k5-site .resource-k5-page h1,
+.editor-preview-stage .k5-site .download-page h1 { color: var(--canva-navy); font-weight: 800; }
+.editor-preview-stage .k5-site .download-card { background: #fffdf8; border: 1px solid var(--canva-border); border-radius: 20px; box-shadow: none; }
+.editor-preview-stage .k5-site .download-btn { background: var(--canva-navy); color: #fff; border-radius: 8px; }
+.editor-preview-stage .k5-site .auth-page { background: var(--canva-cream); padding-top: 56px; padding-bottom: 64px; }
+.editor-preview-stage .k5-site .auth-card { background: #fffdf8; border: 1px solid var(--canva-border); border-radius: 20px; box-shadow: 0 12px 40px #0033660b; }
+.editor-preview-stage .k5-site .auth-card-header { background: var(--canva-navy); color: #fff; }
+.editor-preview-stage .k5-site .auth-icon { background: #ffffff20; color: #fff; }
+.editor-preview-stage .k5-site .k5-footer { background: #eee9df; color: var(--canva-navy); border-top-color: var(--canva-border) !important; }
+.editor-preview-stage .k5-site .k5-footer h2,
+.editor-preview-stage .k5-site .k5-footer h3,
+.editor-preview-stage .k5-site .k5-footer a { color: var(--canva-navy); }
+.editor-preview-stage .k5-site .k5-footer-copy { color: var(--canva-muted); border-color: var(--canva-border); }
+.editor-preview-stage .k5-site a:focus-visible,
+.editor-preview-stage .k5-site button:focus-visible { outline: 3px solid var(--canva-secondary); outline-offset: 4px; }
+body:has(.k5-site) .edu-drawer { background: var(--edu-white, #f4f0e6); color: var(--edu-text, #003366); }
+body:has(.k5-site) .auth-modal-card { background: #fffdf8; border: 1px solid var(--edu-border, #d9d5ca); border-radius: 20px; }
+body:has(.k5-site) .auth-modal-card .auth-card-header { background: var(--edu-teal, #003366); color: #fff; }
+body:has(.k5-site) .auth-modal-card .auth-icon { background: #ffffff20; color: #fff; }
+body:has(.k5-site) .auth-modal-card .btn-primary,
+body:has(.k5-site) .auth-modal-card .nav-link.active { background: var(--edu-teal, #003366); border-color: var(--edu-teal, #003366); color: #fff; }
+body:has(.k5-site) .auth-modal-card .form-control { background: #fffdf8; border-color: var(--edu-border, #d9d5ca); color: var(--edu-text, #003366); border-radius: 8px; }
+@media (max-width: 991px) {
+  .editor-preview-stage .k5-site .k5-custom-content .br-section { padding: 36px 24px !important; }
+  .editor-preview-stage .k5-site .k5-custom-content .br-row { grid-template-columns: minmax(0, 1fr) !important; row-gap: 32px !important; column-gap: 0 !important; }
+  .editor-preview-stage .k5-site .k5-custom-content .br-col { grid-column: 1 / -1 !important; }
+  .editor-preview-stage .k5-site .k5-custom-content .br-section:first-child .br-col:first-child .br-block:first-child { margin-bottom: 28px !important; }
+  .editor-preview-stage .k5-site .k5-custom-content h1 { font-size: 52px !important; letter-spacing: -1.5px; }
+  .editor-preview-stage .k5-site .k5-custom-content .image-block { max-width: 520px; margin: auto; }
+  .editor-preview-stage .k5-site .k5-custom-content .br-section:nth-child(2) .br-col:first-child { order: 2; }
+  .editor-preview-stage .k5-site .k5-custom-content .br-section:nth-child(2) h2 { font-size: 40px !important; }
+}
+@media (max-width: 575px) {
+  .editor-preview-stage .k5-site .k5-header-top { min-height: 72px; padding-top: 12px; padding-bottom: 12px; }
+  .editor-preview-stage .k5-site .k5-logo { font-size: 14px; white-space: normal; }
+  .editor-preview-stage .k5-site .k5-custom-content .br-section { padding: 32px 20px !important; }
+  .editor-preview-stage .k5-site .k5-custom-content h1 { font-size: 42px !important; letter-spacing: -1.2px; }
+  .editor-preview-stage .k5-site .k5-custom-content .br-section:first-child .br-col:first-child .br-block:first-child { margin-bottom: 24px !important; }
+  .editor-preview-stage .k5-site .k5-custom-content .br-section:first-child .br-col:first-child .br-block:first-child h2 { font-size: 20px; }
+  .editor-preview-stage .k5-site .k5-custom-content .br-section:first-child p { font-size: 16px !important; margin: 24px auto; }
+  .editor-preview-stage .k5-site .k5-custom-content .br-section:nth-child(2) h2 { font-size: 34px !important; }
+  .editor-preview-stage .k5-site .k5-custom-content .builder-btn { font-size: 14px; gap: 10px; }
+  .editor-preview-stage .k5-site .k5-custom-content .image-block { width: 100%; }
+  .editor-preview-stage .k5-site .library-k5-page { padding-top: 24px; }
+  .editor-preview-stage .k5-site .k5-page-shell { grid-template-columns: minmax(0, 1fr); }
+  .editor-preview-stage .k5-site .k5-page-shell-sidebar { display: none; }
+  .editor-preview-stage .k5-site .k5-catalog-card { border-radius: 12px; }
+}
